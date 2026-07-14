@@ -1,0 +1,295 @@
+You are correct. Do not migrate the repository away from its existing Replit-native structure.
+
+Proceed using the current project architecture:
+
+- pnpm workspace
+- artifacts/api-server
+- artifacts/web
+- lib/shared
+- existing Replit artifact and preview configuration
+
+Do not switch to npm.
+Do not delete pnpm-lock.yaml.
+Do not delete pnpm-workspace.yaml.
+Do not delete the artifacts structure.
+Do not remove Replit configuration required for previews or workflows.
+Do not modify Git remotes.
+Do not push to GitHub.
+Do not implement business features yet.
+
+We are correcting the previous architectural instruction.
+
+The product architecture is now:
+
+/
+  artifacts/
+    api-server/
+    web/
+  lib/
+    shared/
+  docs/
+  scripts/
+  pnpm-workspace.yaml
+  pnpm-lock.yaml
+  package.json
+  .env.example
+  README.md
+
+TASK 001 — PORTABLE FOUNDATION
+
+Build the minimal working foundation inside the current Replit structure.
+
+1. API SERVER
+
+Keep the existing Express API server unless it is currently broken.
+
+Use:
+
+- Node.js
+- TypeScript strict mode
+- Express
+
+Create:
+
+GET /api/health
+
+It must return:
+
+{
+  "status": "ok",
+  "service": "api",
+  "timestamp": "<valid ISO timestamp>"
+}
+
+Requirements:
+
+- environment-configurable host and port;
+- safe development defaults;
+- centralized error handling;
+- request logging;
+- graceful shutdown for SIGINT and SIGTERM;
+- app creation separated from server startup so routes can be tested without opening a real port.
+
+Do not add authentication, database, AI, Instagram, Telegram, Redis, or queues.
+
+2. WEB FRONTEND
+
+Create or complete artifacts/web using:
+
+- React
+- Vite
+- TypeScript strict mode
+
+Create one minimal page titled:
+
+AI Stars Platform
+
+It must display:
+
+- System Status
+- API status: Checking, Online, or Offline
+- Check again button
+
+The frontend must call:
+
+GET /api/health
+
+Use the existing Replit proxy/artifact configuration when appropriate.
+
+Do not hardcode an account-specific or deployment-specific URL inside React components.
+
+Do not create sidebar navigation, dashboards, charts, models, fans, chats, analytics, authentication, or fake business data.
+
+3. SHARED LIBRARY
+
+Create or normalize:
+
+lib/shared
+
+Use:
+
+- TypeScript
+- Zod
+
+Export:
+
+- healthResponseSchema
+- HealthResponse inferred TypeScript type
+
+The API and frontend must both use this shared schema or type.
+
+There must be only one authoritative health response schema.
+
+4. ENVIRONMENT CONFIGURATION
+
+Create or update .env.example with safe example values:
+
+NODE_ENV=development
+API_HOST=0.0.0.0
+API_PORT=3001
+
+Do not include secrets.
+
+The application must work with development defaults when .env is absent.
+
+Ensure real .env files are ignored by Git.
+
+5. ROOT COMMANDS
+
+Preserve pnpm.
+
+The following commands must work from the repository root:
+
+pnpm install
+pnpm run dev
+pnpm run build
+pnpm run typecheck
+pnpm run lint
+pnpm run format:check
+pnpm run test
+pnpm run check
+
+pnpm run check must run:
+
+1. typecheck
+2. lint
+3. format check
+4. tests
+5. production build
+
+Use workspace-compatible pnpm commands.
+
+6. TESTS
+
+Add lightweight automated tests.
+
+API tests must cover:
+
+- valid health response;
+- invalid health response rejection;
+- GET /api/health using the Express app without a live external server.
+
+Frontend tests must cover:
+
+- AI Stars Platform renders;
+- System Status renders;
+- valid health response produces Online;
+- failed request produces Offline;
+- Check again triggers another request.
+
+Tests must not depend on a live external server.
+
+7. PORTABILITY
+
+The repository must remain usable after:
+
+1. pushing to GitHub;
+2. importing into a different Replit account;
+3. running pnpm install;
+4. running pnpm run check;
+5. running pnpm run dev.
+
+Do not introduce:
+
+- absolute local filesystem paths;
+- account-specific Replit IDs in application code;
+- external database requirements;
+- API secrets;
+- dependency on cached node_modules;
+- dependency on a previously running process.
+
+Keep Replit configuration that is necessary for workflows, previews, and artifacts.
+
+8. CLEANUP
+
+Audit existing code and dependencies.
+
+Remove only code that is clearly unused and not required by the Replit environment.
+
+Do not aggressively delete Replit files or configuration.
+
+Do not replace the package manager.
+
+Do not perform a large folder migration.
+
+9. README
+
+Update README with:
+
+- current pnpm workspace architecture;
+- required Node.js version;
+- pnpm installation;
+- pnpm install;
+- pnpm run dev;
+- pnpm run check;
+- pnpm run test;
+- pnpm run build;
+- frontend and API ports;
+- environment variables;
+- repository structure;
+- instructions for importing the GitHub repository into another Replit account;
+- troubleshooting steps.
+
+10. CODE QUALITY
+
+Required:
+
+- TypeScript strict mode;
+- no any;
+- no @ts-ignore;
+- no hidden lint suppressions;
+- no duplicated health types;
+- no placeholder TODO implementations;
+- no secrets.
+
+ACCEPTANCE CRITERIA
+
+The task passes only when:
+
+1. The existing pnpm workspace remains intact.
+2. artifacts/api-server exists and runs.
+3. artifacts/web exists and runs.
+4. lib/shared exists.
+5. pnpm-lock.yaml remains present.
+6. pnpm-workspace.yaml remains present.
+7. GET /api/health returns the required JSON.
+8. The frontend displays API status Online.
+9. Check again works.
+10. pnpm install succeeds.
+11. pnpm run check succeeds.
+12. pnpm run test succeeds.
+13. pnpm run build succeeds.
+14. No TypeScript errors exist.
+15. No ESLint errors exist.
+16. No business functionality is added.
+17. No Git remotes are changed.
+18. No changes are pushed automatically.
+
+CLEAN VERIFICATION
+
+After implementation:
+
+1. Run pnpm install.
+2. Run pnpm run check.
+3. Run pnpm run dev.
+4. Verify the API health endpoint.
+5. Verify the frontend status page.
+6. Do not start Task 002.
+
+AFTER COMPLETION
+
+Report:
+
+1. Final relevant file tree.
+2. Root package.json scripts.
+3. Added and removed dependencies.
+4. Full output of pnpm run check.
+5. Full output of pnpm run test.
+6. Full output of pnpm run build.
+7. Health endpoint response.
+8. Frontend and API ports.
+9. git status --short.
+10. Remaining warnings.
+11. Suggested commit message.
+
+Do not stop again because of the previous npm/apps instruction. That instruction has now been explicitly replaced by this one.
