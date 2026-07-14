@@ -1,0 +1,344 @@
+You are working in the repository:
+
+https://github.com/alexbenner777/ARTEMNEW
+
+The current repository contains an outdated Replit scaffold:
+
+- pnpm workspace
+- Express API under artifacts/api-server
+- no real frontend
+- no apps/api
+- no apps/web
+- no packages/shared
+
+This outdated architecture must be replaced.
+
+Your task is ONLY to create Task 001: a clean, portable project foundation.
+
+Do not implement business features.
+Do not implement authentication.
+Do not add a database or Prisma.
+Do not add AI integrations.
+Do not add Instagram or Telegram integrations.
+Do not create dashboard modules beyond a minimal System Status page.
+Do not begin Task 002.
+Do not commit or push changes.
+Do not modify Git remotes or Git history.
+
+TARGET ARCHITECTURE
+
+Convert the repository into an npm-workspaces monorepo:
+
+/
+  apps/
+    api/
+    web/
+  packages/
+    shared/
+  scripts/
+  docs/
+  .env.example
+  .gitignore
+  .nvmrc
+  package.json
+  package-lock.json
+  README.md
+  tsconfig.base.json
+  tsconfig.json
+
+REMOVE THE OLD SCAFFOLD
+
+Remove obsolete project structures and configuration:
+
+- artifacts/api-server
+- artifacts/mockup-sandbox
+- pnpm-lock.yaml
+- pnpm-workspace.yaml
+- pnpm-specific scripts
+- Express dependencies
+- unused Replit-specific plugins
+- unused scaffold libraries
+- unused generated code
+- unused placeholder files
+
+Do not remove the .git directory.
+Do not modify remotes.
+Do not create a new Git repository.
+
+PACKAGE MANAGER
+
+Use npm only.
+
+The root package.json must contain:
+
+"workspaces": [
+  "apps/*",
+  "packages/*"
+]
+
+Generate package-lock.json.
+
+The following commands must work from the repository root:
+
+npm install
+npm run dev
+npm run build
+npm run typecheck
+npm run lint
+npm run format:check
+npm run test
+npm run check
+
+npm run check must execute:
+
+1. typecheck
+2. lint
+3. format:check
+4. test
+5. build
+
+Use cross-platform scripts.
+
+NODE VERSION
+
+Create .nvmrc containing:
+
+20
+
+Add root package.json engines:
+
+"engines": {
+  "node": ">=20",
+  "npm": ">=10"
+}
+
+API APPLICATION
+
+Create apps/api using:
+
+- Node.js
+- TypeScript strict mode
+- Fastify
+
+Do not use Express.
+
+The API must:
+
+- listen on 0.0.0.0;
+- use API_PORT from the environment;
+- default to port 3001;
+- expose GET /api/health;
+- use Fastify request logging;
+- have centralized error handling;
+- gracefully shut down on SIGINT and SIGTERM.
+
+GET /api/health must return:
+
+{
+  "status": "ok",
+  "service": "api",
+  "timestamp": "<valid ISO timestamp>"
+}
+
+Create the Fastify app separately from the startup file so it can be tested without opening a real network port.
+
+WEB APPLICATION
+
+Create apps/web using:
+
+- React
+- Vite
+- TypeScript strict mode
+
+Create one minimal page titled:
+
+AI Stars Platform
+
+It must display:
+
+- System Status
+- API status: Checking, Online, or Offline
+- Check again button
+
+The frontend must call:
+
+GET /api/health
+
+Configure the Vite development proxy:
+
+/api -> http://localhost:3001
+
+Do not hardcode a production API URL inside React components.
+
+Do not add application navigation, sidebar, dashboard modules, charts, authentication, or fake business data.
+
+SHARED PACKAGE
+
+Create packages/shared using:
+
+- TypeScript
+- Zod
+
+Export:
+
+- healthResponseSchema
+- HealthResponse inferred TypeScript type
+
+Both apps/api and apps/web must use this shared schema or inferred type.
+
+There must be only one authoritative health response schema.
+
+ENVIRONMENT CONFIGURATION
+
+Create .env.example containing:
+
+NODE_ENV=development
+API_HOST=0.0.0.0
+API_PORT=3001
+
+The project must work without a local .env file by using safe development defaults.
+
+Ignore local environment files in Git.
+
+TESTS
+
+Add lightweight automated tests.
+
+At minimum:
+
+API:
+- validate a correct health response;
+- reject an invalid health response;
+- test GET /api/health through Fastify inject if practical.
+
+Frontend:
+- render AI Stars Platform;
+- render System Status;
+- show Online after a valid API response;
+- show Offline after a failed request;
+- verify Check again triggers another request.
+
+Tests must not require a live external service.
+
+CODE QUALITY
+
+Required:
+
+- TypeScript strict mode;
+- no any;
+- no @ts-ignore;
+- no disabled lint rules used to hide errors;
+- no placeholder TODO implementations;
+- no duplicated health response types;
+- no absolute local filesystem paths;
+- no Replit-account-specific IDs;
+- no secrets.
+
+Use:
+
+- ESLint;
+- Prettier;
+- Vitest;
+- Testing Library for React tests;
+- concurrently for npm run dev when appropriate.
+
+PORTABILITY
+
+The repository must work after importing it into a different Replit account.
+
+Do not depend on:
+
+- local Replit state;
+- Replit Object Storage;
+- Replit-specific runtime IDs;
+- a database;
+- external API keys;
+- cached node_modules;
+- previously running processes.
+
+README
+
+Write a complete README containing:
+
+- product foundation description;
+- required Node.js version;
+- installation;
+- npm run dev;
+- npm run check;
+- npm run test;
+- npm run build;
+- API and frontend ports;
+- environment variables;
+- repository structure;
+- how to import the GitHub repository into a new Replit account;
+- troubleshooting steps.
+
+Include this account migration workflow:
+
+1. Push all changes to GitHub.
+2. Import the GitHub repository into the new Replit account.
+3. Confirm Node.js 20 or newer is selected.
+4. Run npm install.
+5. Run npm run check.
+6. Run npm run dev.
+
+CLEAN INSTALL VERIFICATION
+
+After implementation:
+
+1. Remove all node_modules directories.
+2. Remove obsolete pnpm caches and build outputs.
+3. Run npm install.
+4. Run npm run check.
+5. Run npm run dev.
+6. Verify GET http://localhost:3001/api/health.
+7. Verify the frontend shows API status Online.
+
+Do not claim success using old node_modules or previously running processes.
+
+ACCEPTANCE CRITERIA
+
+The task passes only when:
+
+1. apps/api exists.
+2. apps/web exists.
+3. packages/shared exists.
+4. artifacts/api-server no longer exists.
+5. pnpm-lock.yaml no longer exists.
+6. pnpm-workspace.yaml no longer exists.
+7. package-lock.json exists.
+8. Express is no longer used.
+9. Fastify is used.
+10. npm install succeeds cleanly.
+11. npm run check succeeds.
+12. npm run test succeeds.
+13. npm run build succeeds.
+14. GET /api/health returns the required JSON.
+15. The frontend displays API status Online.
+16. Check again works.
+17. No TypeScript errors exist.
+18. No ESLint errors exist.
+19. No secrets are committed.
+20. Git remotes and Git history remain unchanged.
+
+AFTER IMPLEMENTATION
+
+Do not start any additional feature.
+Do not commit or push.
+
+Report:
+
+1. Final file tree.
+2. Root package.json.
+3. Removed directories, dependencies, and scaffold files.
+4. Added dependencies and their purpose.
+5. Full npm run check output.
+6. Full npm run test output.
+7. Full npm run build output.
+8. Output of curl http://localhost:3001/api/health.
+9. Output of git status --short.
+10. Current branch and commit hash.
+11. Remaining warnings.
+12. Suggested Git commit message.
+
+Do not claim success unless every acceptance criterion has been verified.
