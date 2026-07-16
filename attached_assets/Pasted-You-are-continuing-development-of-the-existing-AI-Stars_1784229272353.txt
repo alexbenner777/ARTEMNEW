@@ -1,0 +1,574 @@
+You are continuing development of the existing AI Stars Platform repository.
+
+The current project is already working and pushed to GitHub.
+
+CURRENT ARCHITECTURE
+
+Preserve the current Replit-native structure:
+
+- pnpm workspace
+- artifacts/api-server
+- artifacts/web
+- existing Express API
+- existing Replit workflows, previews, and artifact configuration
+- existing health endpoint
+- existing tests and verification scripts
+
+Do not migrate package managers.
+Do not migrate folders.
+Do not replace Express.
+Do not remove Replit configuration.
+Do not change Git remotes.
+Do not start database, authentication, AI, Instagram, or Telegram work.
+
+TASK 002
+
+Build the reusable frontend application shell, responsive navigation, routing, and placeholder pages for AI Stars Platform.
+
+This task concerns frontend structure and visual foundation only.
+
+FIRST: AUDIT THE CURRENT FRONTEND
+
+Before modifying code:
+
+1. Inspect artifacts/web.
+2. Identify the current routing library, component system, CSS approach, and icon library.
+3. Reuse suitable existing dependencies.
+4. If no suitable router exists, install react-router-dom.
+5. If no suitable icon library exists, install lucide-react.
+6. Do not install multiple libraries that solve the same problem.
+7. Do not remove anything required by existing Replit workflows or tests.
+
+Do not stop to ask for confirmation unless there is a genuinely destructive conflict.
+
+PRODUCT NAME
+
+AI Stars Platform
+
+VISUAL DIRECTION
+
+Create a professional dark SaaS dashboard inspired by the provided references.
+
+Use:
+
+- deep navy application background;
+- darker sidebar;
+- slightly lighter content panels;
+- subtle borders;
+- violet primary accent;
+- green success indicator;
+- muted secondary text;
+- restrained shadows;
+- compact but readable spacing;
+- rounded interface elements;
+- clear visual hierarchy.
+
+Do not copy third-party logos, brand names, usernames, revenue values, or proprietary content from the references.
+
+Do not add fake fans, fake chats, fake revenue, fake models, or fake analytics.
+
+DESIGN TOKENS
+
+Create or normalize reusable CSS variables for:
+
+- app background;
+- sidebar background;
+- panel background;
+- elevated panel background;
+- border;
+- primary text;
+- muted text;
+- primary accent;
+- accent hover;
+- success;
+- warning;
+- destructive;
+- focus ring;
+- border radius.
+
+Components should use these tokens instead of repeating unrelated hardcoded colors.
+
+Do not load external fonts from a third-party CDN.
+
+ROUTES
+
+Create these routes:
+
+/
+  redirects to /dashboard
+
+/dashboard
+/models
+/fans
+/chats
+/templates
+/mass-messages
+/auto-messages
+/promo-renewals
+/analytics
+/team
+/settings
+
+Unknown routes must render an in-product Not Found page.
+
+Use client-side routing without full-page reloads.
+
+CENTRAL NAVIGATION CONFIG
+
+Create one centralized navigation configuration containing:
+
+- route path;
+- label;
+- page title;
+- description;
+- icon;
+- navigation section.
+
+Do not duplicate route labels and page metadata across multiple components.
+
+Use these navigation sections:
+
+MAIN
+- Dashboard
+- Models
+- Fans
+- Chats
+
+TOOLS
+- Templates
+- Mass Messages
+- Auto Messages
+- Promo Renewals
+- Analytics
+
+ACCOUNT
+- Team
+- Settings
+
+APPLICATION SHELL
+
+Create reusable layout components, for example:
+
+artifacts/web/src/
+  app/
+    router.tsx
+  components/
+    layout/
+      app-shell.tsx
+      sidebar.tsx
+      topbar.tsx
+      mobile-navigation.tsx
+    navigation/
+      navigation-config.ts
+    system/
+      api-status.tsx
+  pages/
+      dashboard-page.tsx
+      module-placeholder-page.tsx
+      not-found-page.tsx
+
+You may adjust filenames when the existing structure requires it, but maintain clear separation between:
+
+- routing;
+- layout;
+- navigation configuration;
+- reusable UI;
+- pages.
+
+Do not duplicate the full layout in every page.
+
+DESKTOP SIDEBAR
+
+Create a persistent desktop sidebar.
+
+At the top show:
+
+- a simple product mark;
+- AI Stars Platform;
+- secondary label: Workspace.
+
+Display the navigation groups and links listed above.
+
+Requirements:
+
+- current route is clearly highlighted;
+- links use client-side navigation;
+- icons and labels align consistently;
+- navigation has semantic markup;
+- sidebar can collapse and expand.
+
+Expanded sidebar:
+
+- icon and text are visible.
+
+Collapsed sidebar:
+
+- icons remain visible;
+- labels are hidden;
+- icon-only controls have aria-labels or accessible tooltips.
+
+Store collapsed state in localStorage.
+
+The app must still start correctly when localStorage is unavailable or contains an invalid value.
+
+SIDEBAR FOOTER
+
+At the bottom show a static workspace user placeholder:
+
+Workspace Owner
+Owner
+
+This is a visual placeholder only.
+
+Do not add:
+
+- logout functionality;
+- account dropdown;
+- authentication;
+- editable profile.
+
+MOBILE NAVIGATION
+
+For narrow screens:
+
+- hide the permanent desktop sidebar;
+- show a menu button in the topbar;
+- open navigation in an accessible drawer or sheet;
+- close the drawer after selecting a route;
+- support Escape to close;
+- prevent background interaction while the drawer is open;
+- avoid horizontal page overflow.
+
+Do not create a separate duplicated navigation list. Reuse the same centralized navigation configuration.
+
+TOPBAR
+
+Create a reusable topbar.
+
+Left side:
+
+- mobile menu button when applicable;
+- current page title.
+
+Right side:
+
+- compact API status;
+- disabled visual search placeholder;
+- circular user avatar placeholder.
+
+The search field is visual only.
+
+Use placeholder text:
+
+Search
+
+It must be disabled or clearly marked unavailable.
+
+Do not implement search functionality.
+
+API STATUS
+
+Preserve the existing GET /api/health integration.
+
+Refactor the existing status logic into a reusable API status hook or component if needed.
+
+Support:
+
+- Checking;
+- Online;
+- Offline;
+- Check again.
+
+Continue validating the API response through the existing shared/generated schema architecture.
+
+Do not duplicate the health-response schema.
+
+TOPBAR STATUS
+
+Show a compact status:
+
+- green indicator and “API Online”;
+- muted indicator and “Checking”;
+- red indicator and “API Offline”.
+
+DASHBOARD PAGE
+
+The Dashboard must contain:
+
+1. Page header:
+   - Dashboard
+   - Overview of workspace health and recent system activity.
+
+2. Full System Status card:
+   - API service name;
+   - current status;
+   - last successful check time when available;
+   - Check again button;
+   - user-friendly error state.
+
+3. Getting Started section containing three neutral cards:
+   - Add a model
+   - Connect a messaging channel
+   - Invite your team
+
+These cards must clearly say that their functionality will be added later.
+
+They must not pretend to work.
+
+Do not add fake metrics or charts.
+
+PLACEHOLDER MODULE PAGES
+
+Create restrained placeholder pages for:
+
+Models:
+Manage creator profiles and their platform settings.
+
+Fans:
+View and organize audience relationships.
+
+Chats:
+Manage conversations handled by operators and AI assistants.
+
+Templates:
+Create reusable conversation and messaging templates.
+
+Mass Messages:
+Prepare and track approved bulk communication campaigns.
+
+Auto Messages:
+Configure rule-based automated messaging workflows.
+
+Promo Renewals:
+Manage promotional renewal workflows.
+
+Analytics:
+Review performance, conversation, and operational metrics.
+
+Team:
+Manage workspace members, roles, and permissions.
+
+Settings:
+Configure workspace and integration settings.
+
+Every page must contain:
+
+- h1 page title;
+- description;
+- consistent empty-state panel;
+- text stating that this module will be implemented in a later task.
+
+Do not add fake rows, cards, users, conversations, money values, or charts.
+
+NOT FOUND PAGE
+
+Unknown routes must show:
+
+- 404;
+- Page not found;
+- a button returning to Dashboard.
+
+Render it inside the platform visual style.
+
+RESPONSIVE BEHAVIOR
+
+Verify the interface at approximately:
+
+- 1440px;
+- 1024px;
+- 768px;
+- 390px.
+
+Requirements:
+
+- no horizontal scrolling;
+- content must remain readable;
+- topbar must not overlap content;
+- sidebar must not cover desktop content;
+- mobile drawer must fit within the screen;
+- buttons must remain usable.
+
+ACCESSIBILITY
+
+Required:
+
+- semantic nav element;
+- semantic buttons;
+- visible keyboard focus;
+- aria-labels on icon-only controls;
+- accessible mobile menu;
+- page title as h1;
+- sufficient text contrast;
+- no clickable divs when a semantic element exists;
+- active navigation state exposed with aria-current where appropriate.
+
+STATE RULES
+
+Do not add Redux, Zustand, MobX, or another global state system.
+
+Use:
+
+- local React state for sidebar and mobile drawer;
+- the existing query/data solution for API health;
+- localStorage only for sidebar collapsed state.
+
+Do not create abstractions that are not yet needed.
+
+BACKEND RULES
+
+Do not add business API endpoints.
+
+Do not change the health response contract.
+
+Do not modify backend files unless a minimal change is strictly required to keep the existing health integration working.
+
+TESTS
+
+Preserve every existing test.
+
+Add or update frontend tests covering at least:
+
+1. / redirects to /dashboard.
+2. Dashboard renders inside the application shell.
+3. All required navigation links exist.
+4. Clicking Models navigates to the Models page.
+5. Navigation does not cause a full browser reload.
+6. Current navigation entry has active state.
+7. Unknown route renders Not Found.
+8. Dashboard displays Online after a valid health response.
+9. Dashboard displays Offline after a failed health request.
+10. Check again triggers a new health request.
+11. Sidebar collapse control is accessible.
+12. Mobile menu button is accessible.
+13. Mobile navigation closes after selecting a route.
+
+Tests must mock network requests.
+
+Do not require a real live API server during component tests.
+
+QUALITY REQUIREMENTS
+
+- TypeScript strict mode remains enabled.
+- Do not use any.
+- Do not use @ts-ignore.
+- Do not disable lint rules to hide errors.
+- Avoid oversized components.
+- Avoid duplicated navigation definitions.
+- Remove dead code created during this task.
+- Do not add unused dependencies.
+- Keep existing pnpm commands working.
+- Keep Replit previews working.
+
+MANUAL VERIFICATION
+
+After implementation, manually inspect:
+
+/dashboard
+/models
+/fans
+/chats
+/templates
+/mass-messages
+/auto-messages
+/promo-renewals
+/analytics
+/team
+/settings
+/nonexistent-route
+
+Verify:
+
+- desktop sidebar;
+- sidebar collapsed state;
+- sidebar expanded state;
+- active navigation styling;
+- mobile navigation;
+- browser Back and Forward navigation;
+- API Online status;
+- Check again button;
+- responsive layout.
+
+GIT AND DELIVERY RULES
+
+After implementation:
+
+1. Run pnpm install if dependencies changed.
+2. Run pnpm run check.
+3. Fix every error.
+4. Run pnpm run check again until it passes completely.
+5. Confirm tests and production build pass.
+6. Review git diff for:
+   - secrets;
+   - account-specific identifiers;
+   - generated junk;
+   - unrelated changes;
+   - accidental removal of Replit configuration.
+7. Only when all checks pass:
+   - run git add -A;
+   - commit with this exact message:
+
+feat: add responsive application shell and navigation
+
+   - push to origin main.
+8. Confirm that the push succeeded.
+9. Report the final commit hash.
+
+If a check fails:
+
+- do not commit;
+- do not push;
+- fix the problem first.
+
+Never:
+
+- use git push --force;
+- rewrite Git history;
+- change Git remotes;
+- delete Git tags;
+- expose secrets.
+
+ACCEPTANCE CRITERIA
+
+Task 002 passes only when:
+
+1. Existing backend health endpoint still works.
+2. Existing Replit workflows still work.
+3. pnpm run check passes.
+4. All tests pass.
+5. Production build passes.
+6. / redirects to /dashboard.
+7. Every required route works.
+8. Desktop sidebar works.
+9. Sidebar collapse works.
+10. Mobile navigation works.
+11. Active route styling works.
+12. Browser back and forward work.
+13. API status is visible in the topbar.
+14. Dashboard System Status works.
+15. Check again works.
+16. Unknown routes show Not Found.
+17. Mobile width has no horizontal overflow.
+18. No fake business data is added.
+19. No database or authentication is added.
+20. Changes are committed and pushed to origin/main.
+
+AFTER COMPLETION
+
+Do not start Task 003.
+
+Report:
+
+1. Final relevant frontend file tree.
+2. Dependencies added and removed.
+3. Routes created.
+4. Components created.
+5. Full pnpm run check result.
+6. Test totals.
+7. Production build result.
+8. Health endpoint result.
+9. Manual responsive verification result.
+10. Final commit hash.
+11. Confirmation that origin/main was pushed.
+12. Remaining warnings or known issues.
+
+Do not claim completion unless every acceptance criterion passes.

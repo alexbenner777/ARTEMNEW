@@ -1,23 +1,23 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import Home from './home';
+import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach } from "vitest";
+import Home from "./home";
 
 const refetch = vi.fn();
 
-vi.mock('@workspace/api-client-react', () => ({
+vi.mock("@workspace/api-client-react", () => ({
   useHealthCheck: vi.fn(),
 }));
 
-import { useHealthCheck } from '@workspace/api-client-react';
+import { useHealthCheck } from "@workspace/api-client-react";
 
 const mockedUseHealthCheck = vi.mocked(useHealthCheck);
 
-describe('Home status page', () => {
+describe("Home status page", () => {
   beforeEach(() => {
     refetch.mockReset();
   });
 
-  it('shows the product title and a checking state while loading', () => {
+  it("shows the product title and a checking state while loading", () => {
     mockedUseHealthCheck.mockReturnValue({
       data: undefined,
       isLoading: true,
@@ -29,13 +29,17 @@ describe('Home status page', () => {
 
     render(<Home />);
 
-    expect(screen.getByText('AI Stars Platform')).toBeInTheDocument();
+    expect(screen.getByText("AI Stars Platform")).toBeInTheDocument();
     expect(screen.getByText(/Checking status/i)).toBeInTheDocument();
   });
 
-  it('shows an online state when the health check succeeds', () => {
+  it("shows an online state when the health check succeeds", () => {
     mockedUseHealthCheck.mockReturnValue({
-      data: { status: 'ok', service: 'api', timestamp: new Date().toISOString() },
+      data: {
+        status: "ok",
+        service: "api",
+        timestamp: new Date().toISOString(),
+      },
       isLoading: false,
       isError: false,
       isSuccess: true,
@@ -48,7 +52,7 @@ describe('Home status page', () => {
     expect(screen.getByText(/All systems online/i)).toBeInTheDocument();
   });
 
-  it('shows an offline state when the health check fails', () => {
+  it("shows an offline state when the health check fails", () => {
     mockedUseHealthCheck.mockReturnValue({
       data: undefined,
       isLoading: false,
@@ -65,7 +69,11 @@ describe('Home status page', () => {
 
   it('triggers a refetch when "Check again" is clicked', () => {
     mockedUseHealthCheck.mockReturnValue({
-      data: { status: 'ok', service: 'api', timestamp: new Date().toISOString() },
+      data: {
+        status: "ok",
+        service: "api",
+        timestamp: new Date().toISOString(),
+      },
       isLoading: false,
       isError: false,
       isSuccess: true,
@@ -74,7 +82,7 @@ describe('Home status page', () => {
     } as never);
 
     render(<Home />);
-    fireEvent.click(screen.getByRole('button', { name: /check again/i }));
+    fireEvent.click(screen.getByRole("button", { name: /check again/i }));
 
     expect(refetch).toHaveBeenCalledTimes(1);
   });

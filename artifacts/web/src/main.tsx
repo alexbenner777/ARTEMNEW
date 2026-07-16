@@ -1,7 +1,10 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
-import App from './App';
+import App from "./App";
 
-import './index.css';
+import "./index.css";
 
-createRoot(document.getElementById('root')!).render(<App />);
+// Apply dark theme by default
+document.documentElement.classList.add("dark");
+
+createRoot(document.getElementById("root")!).render(<App />);

@@ -1,0 +1,240 @@
+Task 001 is implemented and already pushed, but several portability and verification requirements remain incomplete.
+
+This is a small corrective task only.
+
+Do not change the current UI design.
+Do not migrate away from pnpm.
+Do not migrate away from artifacts/.
+Do not replace Express.
+Do not remove the existing api-zod or api-client-react architecture.
+Do not add business features.
+Do not begin Task 002.
+Do not commit or push after completing this repair.
+
+Keep:
+
+- pnpm workspace
+- artifacts/api-server
+- artifacts/web
+- lib/api-zod
+- lib/api-client-react
+- existing Replit preview and workflow configuration
+- existing health page and tests
+
+REPAIR 1 — API ENVIRONMENT DEFAULTS
+
+Update artifacts/api-server/src/index.ts.
+
+The server must support:
+
+API_HOST
+API_PORT
+PORT
+
+Use this precedence for the port:
+
+1. API_PORT
+2. PORT
+3. default "3001"
+
+Use this host:
+
+1. API_HOST
+2. default "0.0.0.0"
+
+The API must not crash merely because PORT is absent.
+
+Validate that the selected port is a valid positive integer.
+
+Listen using both host and port.
+
+Preserve graceful shutdown for:
+
+- SIGINT
+- SIGTERM
+
+Do not change GET /api/health behavior.
+
+REPAIR 2 — ENVIRONMENT EXAMPLE
+
+Create a root .env.example containing:
+
+NODE_ENV=development
+API_HOST=0.0.0.0
+API_PORT=3001
+
+Do not add secrets.
+
+Update .gitignore so that real environment files are ignored, while .env.example remains committed.
+
+Ignore at least:
+
+.env
+.env.local
+.env.*.local
+
+Do not ignore .env.example.
+
+REPAIR 3 — ROOT COMMANDS
+
+Add or normalize these root commands:
+
+pnpm run dev
+pnpm run build
+pnpm run typecheck
+pnpm run lint
+pnpm run format:check
+pnpm run test
+pnpm run check
+
+pnpm run dev must start both:
+
+- @workspace/api-server
+- @workspace/web
+
+Use a portable workspace-compatible solution such as concurrently.
+
+pnpm run check must run:
+
+1. typecheck
+2. lint
+3. format:check
+4. test
+5. build
+
+Do not let check stop after only typecheck and test.
+
+REPAIR 4 — ESLINT
+
+Add a minimal TypeScript-aware ESLint configuration for the current workspace.
+
+It must lint:
+
+- artifacts/api-server source
+- artifacts/web source
+- relevant lib source
+
+Do not lint:
+
+- node_modules
+- dist
+- coverage
+- generated build output
+- Replit cache directories
+
+Do not suppress legitimate errors.
+Do not use @ts-ignore.
+Do not use any solely to satisfy linting.
+
+REPAIR 5 — FORMAT CHECK
+
+Use the existing Prettier dependency.
+
+Add:
+
+pnpm run format:check
+
+It must verify formatting without modifying files.
+
+Do not include:
+
+- node_modules
+- dist
+- coverage
+- caches
+- generated lockfile content if it causes unnecessary scanning
+
+REPAIR 6 — README
+
+Create README.md documenting:
+
+- AI Stars Platform foundation
+- current pnpm workspace structure
+- artifacts/api-server
+- artifacts/web
+- lib/api-zod
+- lib/api-client-react
+- required Node.js and pnpm versions
+- pnpm install
+- pnpm run dev
+- pnpm run check
+- pnpm run test
+- pnpm run build
+- API environment variables
+- API health route
+- Replit preview behavior
+
+Include this account migration procedure:
+
+1. Push all changes to GitHub.
+2. Import the repository into the new Replit account.
+3. Run pnpm install.
+4. Run pnpm run check.
+5. Run pnpm run dev.
+6. Confirm that the frontend displays API status Online.
+
+REPAIR 7 — UNUSED API DEPENDENCIES
+
+Audit artifacts/api-server/package.json.
+
+If these packages are not imported or required by current code, remove them:
+
+- @workspace/db
+- drizzle-orm
+- cookie-parser
+- @types/cookie-parser
+
+Do not remove anything actually used by the server.
+
+Do not perform a broader dependency cleanup in this task.
+
+TESTS
+
+Preserve all existing tests.
+
+Add or update an API startup configuration test that confirms:
+
+- API_PORT is preferred over PORT;
+- PORT is used when API_PORT is absent;
+- 3001 is used when neither variable exists;
+- API_HOST defaults to 0.0.0.0;
+- invalid port values are rejected.
+
+Avoid testing by opening unnecessary real network ports. Extract environment parsing into a small testable function if appropriate.
+
+ACCEPTANCE CRITERIA
+
+The repair passes only when:
+
+1. pnpm install succeeds.
+2. pnpm run typecheck succeeds.
+3. pnpm run lint succeeds.
+4. pnpm run format:check succeeds.
+5. pnpm run test succeeds.
+6. pnpm run build succeeds.
+7. pnpm run check runs all five verification stages and succeeds.
+8. pnpm run dev starts the frontend and API.
+9. The API can start without PORT being explicitly defined.
+10. GET /api/health still returns status ok.
+11. The frontend still displays Online.
+12. .env.example exists.
+13. README.md exists.
+14. Real .env files are ignored.
+15. Existing Replit previews and workflows remain functional.
+16. No business features are added.
+17. No commit or push is performed.
+
+AFTER COMPLETION
+
+Report:
+
+1. Files changed.
+2. Dependencies added or removed.
+3. Root package.json scripts.
+4. Full pnpm run check output.
+5. Full pnpm run test output.
+6. Health endpoint response.
+7. git status --short.
+8. Any remaining warnings.
+
+Do not commit and do not start Task 002.

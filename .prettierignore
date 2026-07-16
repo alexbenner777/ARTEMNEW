@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+coverage
+.cache
+.local
+pnpm-lock.yaml
+**/generated/**
+**/*.generated.*
+**/.generated/**
+attached_assets
